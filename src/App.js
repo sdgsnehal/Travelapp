@@ -4,11 +4,31 @@ import Map from "./components/Map/Map";
 import List from "./components/List/List";
 import PlaceDetails from "./components/PlaceDetails/PlaceDetails";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { getPlaceData } from "./api";
+import React,{useEffect ,useState} from "react";
 
 const theme = createTheme({
   // Customize your theme here
 });
 function App() {
+  const [places,setPlaces]= useState();
+  const [coordinates,setCoordinates]=useState({});
+  const [bounds,setBounds]=useState(null);
+ 
+  useEffect(()=>{
+    navigator.geolocation.getCurrentPosition(({coords:{latitude,longitude}})=>{
+      setCoordinates({lat:latitude,lng:longitude})
+    })
+
+  },[])
+  useEffect(()=>{
+    console.log(bounds);
+    getPlaceData(bounds.sw,bounds.ne)
+    .then((data)=>{
+        console.log(data)
+         setPlaces(data) 
+    })
+  },[coordinates,bounds])
   return (
     <>
    <ThemeProvider theme={theme}>
@@ -19,7 +39,11 @@ function App() {
           <List />
         </Grid>
         <Grid item xs={12} md={8}>
-          <Map />
+          <Map setCoordinates={setCoordinates}
+          setBounds={setBounds}
+          coordinates={coordinates}
+          
+          />
         </Grid>
       </Grid>
       </ThemeProvider>

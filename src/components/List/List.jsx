@@ -1,6 +1,15 @@
 import React ,{useState} from 'react'
 import { CircularProgress,Grid,Typography,InputLabel,MenuItem,FormControl,Select} from '@mui/material'
-import useStyles from './styles'
+import useStyles from './styles';
+import PlaceDetails from '../PlaceDetails/PlaceDetails';
+const places = [
+  { name:'Cool Place'},
+  {name:'Best Beer'},
+  { name:'Best Steak'},
+  { name:'Cool Place'},
+  {name:'Best Beer'},
+  { name:'Best Steak'},
+]
 
 const List = () => {
   const classes = useStyles();
@@ -30,9 +39,18 @@ const List = () => {
       </Select>
 
     </FormControl>
+    <Grid container spacing={3} className={classes.list}>
+    {places?.map((place, i) => {
+          return (
+            <Grid item key={i} xs={12}>
+              <PlaceDetails place={place} />
+            </Grid>
+          );
+        })}
+    </Grid>
 
     </div>
   )
 }
 
-export default List
+export default List;
